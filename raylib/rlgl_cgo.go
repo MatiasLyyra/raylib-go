@@ -607,17 +607,102 @@ func LoadVertexArray() uint32 {
 	return uint32(C.rlLoadVertexArray())
 }
 
-// UnloadVertexBuffer .
+// LoadVertexBuffer - Load a vertex buffer object
+func LoadVertexBuffer(buffer unsafe.Pointer, size int32, dynamic bool) uint32 {
+	csize := C.int(size)
+	cdynamic := C.bool(dynamic)
+	return uint32(C.rlLoadVertexBuffer(buffer, csize, cdynamic))
+}
+
+// LoadVertexBufferElement - Load vertex buffer elements object
+func LoadVertexBufferElement(buffer unsafe.Pointer, size int32, dynamic bool) uint32 {
+	csize := C.int(size)
+	cdynamic := C.bool(dynamic)
+	return uint32(C.rlLoadVertexBufferElement(buffer, csize, cdynamic))
+}
+
+// UpdateVertexBuffer - Update vertex buffer object data on GPU buffer
+func UpdateVertexBuffer(bufferId uint32, data unsafe.Pointer, dataSize int32, offset int32) {
+	cbufferId := C.uint(bufferId)
+	cdataSize := C.int(dataSize)
+	coffset := C.int(offset)
+	C.rlUpdateVertexBuffer(cbufferId, data, cdataSize, coffset)
+}
+
+// UpdateVertexBufferElements - Update vertex buffer elements data on GPU buffer
+func UpdateVertexBufferElements(id uint32, data unsafe.Pointer, dataSize int32, offset int32) {
+	cid := C.uint(id)
+	cdataSize := C.int(dataSize)
+	coffset := C.int(offset)
+	C.rlUpdateVertexBufferElements(cid, data, cdataSize, coffset)
+}
+
+// UnloadVertexArray - Unload vertex array (vao)
+func UnloadVertexArray(vaoId uint32) {
+	cvaoId := C.uint(vaoId)
+	C.rlUnloadVertexArray(cvaoId)
+}
+
+// UnloadVertexBuffer - Unload vertex buffer object
 func UnloadVertexBuffer(vboId uint32) {
 	cvboId := C.uint(vboId)
 	C.rlUnloadVertexBuffer(cvboId)
 }
 
-// SetVertexAttributeDivisor .
+// SetVertexAttribute - Set vertex attribute data configuration
+func SetVertexAttribute(index uint32, compSize int32, type_ int32, normalized bool, stride int32, offset int32) {
+	cindex := C.uint(index)
+	ccompSize := C.int(compSize)
+	ctype := C.int(type_)
+	cnormalized := C.bool(normalized)
+	cstride := C.int(stride)
+	coffset := C.int(offset)
+	C.rlSetVertexAttribute(cindex, ccompSize, ctype, cnormalized, cstride, coffset)
+}
+
+// SetVertexAttributeDefault - Set vertex attribute default value, when attribute to provided
+func SetVertexAttributeDefault(locIndex int32, value unsafe.Pointer, attribType int32, count int32) {
+	clocIndex := C.int(locIndex)
+	cattribType := C.int(attribType)
+	ccount := C.int(count)
+	C.rlSetVertexAttributeDefault(clocIndex, value, cattribType, ccount)
+}
+
+// SetVertexAttributeDivisor - Set vertex attribute data divisor
 func SetVertexAttributeDivisor(index uint32, divisor int32) {
 	cindex := C.uint(index)
 	cdivisor := C.int(divisor)
 	C.rlSetVertexAttributeDivisor(cindex, cdivisor)
+}
+
+// DrawVertexArray - Draw vertex array (currently active vao)
+func DrawVertexArray(offset int32, count int32) {
+	coffset := C.int(offset)
+	ccount := C.int(count)
+	C.rlDrawVertexArray(coffset, ccount)
+}
+
+// DrawVertexArrayElements - Draw vertex array elements
+func DrawVertexArrayElements(offset int32, count int32, buffer unsafe.Pointer) {
+	coffset := C.int(offset)
+	ccount := C.int(count)
+	C.rlDrawVertexArrayElements(coffset, ccount, buffer)
+}
+
+// DrawVertexArrayInstanced - Draw vertex array (currently active vao) with instancing
+func DrawVertexArrayInstanced(offset int32, count int32, instances int32) {
+	coffset := C.int(offset)
+	ccount := C.int(count)
+	cinstances := C.int(instances)
+	C.rlDrawVertexArrayInstanced(coffset, ccount, cinstances)
+}
+
+// DrawVertexArrayElementsInstanced - Draw vertex array elements with instancing
+func DrawVertexArrayElementsInstanced(offset int32, count int, buffer unsafe.Pointer, instances int32) {
+	coffset := C.int(offset)
+	ccount := C.int(count)
+	cinstances := C.int(instances)
+	C.rlDrawVertexArrayElementsInstanced(coffset, ccount, buffer, cinstances)
 }
 
 // LoadTextureDepth - Load depth texture/renderbuffer (to be attached to fbo)
